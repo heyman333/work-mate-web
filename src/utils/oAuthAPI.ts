@@ -1,11 +1,12 @@
 import axios, { type AxiosResponse } from 'axios';
 
 export const googleAuthApi = {
-  exchangeCodeForToken: async (clientId: string, redirectUri: string, code: string) => {
+  exchangeCodeForToken: async (clientId: string, clientSecret: string, redirectUri: string, code: string) => {
     const response: AxiosResponse = await axios.post(
       'https://oauth2.googleapis.com/token',
       new URLSearchParams({
         client_id: clientId,
+        client_secret: clientSecret,
         redirect_uri: redirectUri,
         code,
         grant_type: 'authorization_code',
