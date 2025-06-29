@@ -41,6 +41,9 @@ dependencies:
   react-icons:
     specifier: ^5.5.0
     version: 5.5.0(react@19.1.0)
+  react-kakao-maps-sdk:
+    specifier: ^1.2.0
+    version: 1.2.0(react-dom@19.1.0)(react@19.1.0)
   react-router-dom:
     specifier: ^7.4.1
     version: 7.4.1(react-dom@19.1.0)(react@19.1.0)
@@ -73,6 +76,9 @@ devDependencies:
   globals:
     specifier: ^16.2.0
     version: 16.2.0
+  kakao.maps.d.ts:
+    specifier: ^0.1.40
+    version: 0.1.40
   typescript:
     specifier: ~5.8.3
     version: 5.8.3
@@ -3253,6 +3259,9 @@ packages:
       safe-buffer: 5.2.1
     dev: false
 
+  /kakao.maps.d.ts@0.1.40:
+    resolution: {integrity: sha512-nX69MB1ok04epe3OqS+/tEeWBbU31GSQbvDPJmQRRltzzqn6t4jBsO5v1nzalUjCKzwcH2CptOc767NZ7Hbu3g==}
+
   /keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
     dependencies:
@@ -3572,6 +3581,18 @@ packages:
 
   /react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
+    dev: false
+
+  /react-kakao-maps-sdk@1.2.0(react-dom@19.1.0)(react@19.1.0):
+    resolution: {integrity: sha512-ptyHhtSbvyza+9IAf6TXjE4ZhwwLbXR6avgNM2ju5xed2+fDwJ+gJDFSqhfsKbvFn9K9+3I+dY3JrqruwsGNBw==}
+    peerDependencies:
+      react: '>=16.8'
+      react-dom: '>=16.8'
+    dependencies:
+      '@babel/runtime': 7.27.6
+      kakao.maps.d.ts: 0.1.40
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
     dev: false
 
   /react-router-dom@7.4.1(react-dom@19.1.0)(react@19.1.0):
