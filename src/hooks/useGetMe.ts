@@ -7,5 +7,7 @@ export const useGetMe = (): UseQueryResult<AxiosResponse<{ user: User }>> => {
   return useQuery({
     queryKey: ["me"],
     queryFn: () => api.get("/auth/me"),
+    staleTime: Infinity,
+    gcTime: Infinity,
   });
 };

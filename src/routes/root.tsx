@@ -2,7 +2,12 @@ import { Suspense, lazy } from "react";
 import { Navigate, type RouteObject } from "react-router-dom";
 
 const HomePage = lazy(() => import("../pages/Home"));
-const GoogleAuthCallback = lazy(() => import("../pages/GoogleAuthCallback"));
+const GoogleAuthCallbackPage = lazy(
+  () => import("../pages/GoogleAuthCallback")
+);
+const GithubAuthCallbackPage = lazy(
+  () => import("../pages/GithubAuthCallback")
+);
 const JoinPage = lazy(() => import("../pages/Join"));
 
 export const root: RouteObject[] = [
@@ -19,7 +24,15 @@ export const root: RouteObject[] = [
     path: "/auth/google/callback",
     element: (
       <Suspense>
-        <GoogleAuthCallback />
+        <GoogleAuthCallbackPage />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/auth/github/callback",
+    element: (
+      <Suspense>
+        <GithubAuthCallbackPage />
       </Suspense>
     ),
   },

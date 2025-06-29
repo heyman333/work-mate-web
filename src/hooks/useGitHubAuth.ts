@@ -1,5 +1,6 @@
-import { useState, useCallback } from 'react';
-import { githubAuthApi } from '../utils/oAuthAPI';
+import { useState, useCallback } from "react";
+import api from "@/utils/api";
+import type { AxiosResponse } from "axios";
 
 interface GitHubUser {
   id: number;
@@ -15,7 +16,10 @@ interface UseGitHubAuthReturn {
   error: string | null;
   login: () => void;
   logout: () => void;
-  handleCallback: (code: string) => Promise<void>;
+  handleCallback: (
+    code: string,
+    callback: (user: GitHubUser) => void
+  ) => Promise<void>;
 }
 
 export const useGitHubAuth = (): UseGitHubAuthReturn => {
@@ -24,7 +28,7 @@ export const useGitHubAuth = (): UseGitHubAuthReturn => {
   const [error, setError] = useState<string | null>(null);
 
   const clientId = import.meta.env.VITE_GITHUB_CLIENT_ID;
-  const redirectUri = import.meta.env.VITE_REDIRECT_URI;
+  const redirectUri = import.meta.env.VITE_GITHUB_REDIRECT_URI;
 
   const generateState = useCallback(() => {
     return Math.random().toString(36).substring(2) + Date.now().toString(36);
@@ -34,36 +38,36 @@ export const useGitHubAuth = (): UseGitHubAuthReturn => {
     const params = new URLSearchParams({
       client_id: clientId,
       redirect_uri: redirectUri,
-      scope: 'user:email',
-      state: generateState()
+      scope: "user:email",
+      state: generateState(),
     });
 
     return `https://github.com/login/oauth/authorize?${params.toString()}`;
   }, [clientId, redirectUri, generateState]);
 
-  const handleCallback = useCallback(async (code: string) => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const tokens = await githubAuthApi.exchangeCodeForToken(clientId, redirectUri, code);
-      const userData = await githubAuthApi.getUserInfo(tokens.access_token);
+  const handleCallback = useCallback(
+    async (code: string, callback: (user: GitHubUser) => void) => {
+      setIsLoading(true);
+      setError(null);
 
       try {
-        const emails = await githubAuthApi.getUserEmails(tokens.access_token);
-        const primaryEmail = emails.find((email: any) => email.primary);
-        userData.email = primaryEmail?.email || userData.email;
-      } catch (emailError) {
-        console.warn('Failed to fetch user emails:', emailError);
-      }
+        const userData: AxiosResponse<{ user: GitHubUser }> = await api.post(
+          `/auth/github/callback`,
+          {
+            code,
+          }
+        );
 
-      setUser(userData);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Authentication failed');
-    } finally {
-      setIsLoading(false);
-    }
-  }, [clientId, redirectUri]);
+        setUser(userData.data.user);
+        callback(userData.data.user);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Authentication failed");
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    []
+  );
 
   const login = useCallback(() => {
     window.location.href = getAuthUrl();
@@ -80,6 +84,6 @@ export const useGitHubAuth = (): UseGitHubAuthReturn => {
     error,
     login,
     logout,
-    handleCallback
+    handleCallback,
   };
 };

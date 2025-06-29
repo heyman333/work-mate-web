@@ -1,9 +1,11 @@
 import { Button, HStack, Container, Text } from "@chakra-ui/react";
 import { useGoogleAuth } from "../hooks/useGoogleAuth";
 import { useGetMe } from "@/hooks/useGetMe";
+import { useGitHubAuth } from "@/hooks/useGitHubAuth";
 
 function Home() {
   const { login } = useGoogleAuth();
+  const { login: loginGithub } = useGitHubAuth();
   const { data: me } = useGetMe();
 
   return (
@@ -19,7 +21,7 @@ function Home() {
         <Button color="white" bg="blue.500" onClick={login}>
           Google Login
         </Button>
-        <Button color="white" bg="green.500" onClick={login}>
+        <Button color="white" bg="green.500" onClick={loginGithub}>
           Github Login
         </Button>
       </HStack>

@@ -6,20 +6,23 @@ import {
   HStack,
   Input,
   Stack,
-  Switch,
 } from "@chakra-ui/react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import api from "@/utils/api";
 import type { AxiosError } from "axios";
 import { toaster } from "@/components/ui/toaster";
+import { useState } from "react";
 
 const Join = () => {
   const [searchParams] = useSearchParams();
-  const email = searchParams.get("email") || "";
-  const name = searchParams.get("name") || "";
-  const profileImage = searchParams.get("picture") || "";
+  const defaultEmail = searchParams.get("email") || "";
+  const defaultName = searchParams.get("name") || "";
+  const defaultProfileImage = searchParams.get("picture") || "";
   const type = searchParams.get("type") || "";
+  const [name, setName] = useState(defaultName);
+  const [email, setEmail] = useState(defaultEmail);
+  const [profileImage] = useState(defaultProfileImage);
   const navigate = useNavigate();
 
   const { mutate: join } = useMutation({
@@ -60,20 +63,22 @@ const Join = () => {
       <Stack gap="8" maxW="sm" css={{ "--field-label-width": "96px" }}>
         <Field.Root orientation="horizontal">
           <Field.Label>Name</Field.Label>
-          <Input placeholder="John Doe" flex="1" defaultValue={name} />
+          <Input
+            placeholder="John Doe"
+            flex="1"
+            defaultValue={name}
+            onChange={(e) => setName(e.target.value)}
+          />
         </Field.Root>
 
         <Field.Root orientation="horizontal">
           <Field.Label>Email</Field.Label>
-          <Input placeholder="me@example.com" flex="1" defaultValue={email} />
-        </Field.Root>
-
-        <Field.Root orientation="horizontal">
-          <Field.Label>Hide email</Field.Label>
-          <Switch.Root>
-            <Switch.HiddenInput />
-            <Switch.Control />
-          </Switch.Root>
+          <Input
+            placeholder="me@example.com"
+            flex="1"
+            defaultValue={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
         </Field.Root>
       </Stack>
       <HStack mt={20}>

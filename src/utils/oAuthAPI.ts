@@ -1,19 +1,24 @@
-import axios, { type AxiosResponse } from 'axios';
+import axios, { type AxiosResponse } from "axios";
 
 export const googleAuthApi = {
-  exchangeCodeForToken: async (clientId: string, clientSecret: string, redirectUri: string, code: string) => {
+  exchangeCodeForToken: async (
+    clientId: string,
+    clientSecret: string,
+    redirectUri: string,
+    code: string
+  ) => {
     const response: AxiosResponse = await axios.post(
-      'https://oauth2.googleapis.com/token',
+      "https://oauth2.googleapis.com/token",
       new URLSearchParams({
         client_id: clientId,
         client_secret: clientSecret,
         redirect_uri: redirectUri,
         code,
-        grant_type: 'authorization_code',
+        grant_type: "authorization_code",
       }),
       {
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          "Content-Type": "application/x-www-form-urlencoded",
         },
       }
     );
@@ -22,7 +27,7 @@ export const googleAuthApi = {
 
   getUserInfo: async (accessToken: string) => {
     const response: AxiosResponse = await axios.get(
-      'https://www.googleapis.com/oauth2/v2/userinfo',
+      "https://www.googleapis.com/oauth2/v2/userinfo",
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -30,13 +35,17 @@ export const googleAuthApi = {
       }
     );
     return response.data;
-  }
+  },
 };
 
 export const githubAuthApi = {
-  exchangeCodeForToken: async (clientId: string, redirectUri: string, code: string) => {
+  exchangeCodeForToken: async (
+    clientId: string,
+    redirectUri: string,
+    code: string
+  ) => {
     const response: AxiosResponse = await axios.post(
-      'https://github.com/login/oauth/access_token',
+      "https://github.com/login/oauth/access_token",
       {
         client_id: clientId,
         code,
@@ -44,8 +53,8 @@ export const githubAuthApi = {
       },
       {
         headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
+          Accept: "application/json",
+          "Content-Type": "application/json",
         },
       }
     );
@@ -54,11 +63,11 @@ export const githubAuthApi = {
 
   getUserInfo: async (accessToken: string) => {
     const response: AxiosResponse = await axios.get(
-      'https://api.github.com/user',
+      "https://api.github.com/user",
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          'User-Agent': 'WorkMateApp'
+          "User-Agent": "WorkMateApp",
         },
       }
     );
@@ -67,14 +76,14 @@ export const githubAuthApi = {
 
   getUserEmails: async (accessToken: string) => {
     const response: AxiosResponse = await axios.get(
-      'https://api.github.com/user/emails',
+      "https://api.github.com/user/emails",
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          'User-Agent': 'WorkMateApp'
+          "User-Agent": "WorkMateApp",
         },
       }
     );
-    return response.data;
-  }
+    return response.data as { email: string; primary: boolean }[];
+  },
 };
