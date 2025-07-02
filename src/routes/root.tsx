@@ -1,5 +1,6 @@
 import { Suspense, lazy } from "react";
 import { Navigate, type RouteObject } from "react-router-dom";
+import Layout from "../components/Layout/Layout";
 
 const HomePage = lazy(() => import("../pages/Home"));
 const GoogleAuthCallbackPage = lazy(
@@ -13,12 +14,18 @@ const JoinPage = lazy(() => import("../pages/Join"));
 export const root: RouteObject[] = [
   {
     path: "/",
-    element: (
-      <Suspense>
-        <HomePage />
-      </Suspense>
-    ),
-    shouldRevalidate: () => true,
+    element: <Layout />,
+    children: [
+      {
+        index: true,
+        element: (
+          <Suspense>
+            <HomePage />
+          </Suspense>
+        ),
+        shouldRevalidate: () => true,
+      },
+    ],
   },
   {
     path: "/auth/google/callback",
