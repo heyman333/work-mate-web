@@ -4,72 +4,72 @@
  */
 
 export interface components {
-    schemas: {
-        User: {
-            /** @description User ID */
-            id?: string;
-            /**
-             * Format: email
-             * @description User email
-             */
-            email?: string;
-            /** @description User name */
-            name?: string;
-            /** @description User profile image URL */
-            profileImage?: string;
-            /** @description GitHub ID */
-            githubId?: string;
-            /** @description Google ID */
-            googleId?: string;
-        };
-        UserJoinRequest: {
-            /**
-             * Format: email
-             * @description User email
-             */
-            email: string;
-            /** @description User name */
-            name: string;
-            /** @description User profile image URL */
-            profileImage?: string;
-            /** @description GitHub ID */
-            githubId?: string;
-            /** @description Google ID */
-            googleId?: string;
-        };
-        UserCheckRequest: {
-            /**
-             * Format: email
-             * @description User email
-             */
-            email?: string;
-            /** @description GitHub ID */
-            githubId?: string;
-            /** @description Google ID */
-            googleId?: string;
-        };
-        Error: {
-            /** @description Error message */
-            error?: string;
-        };
-        SuccessResponse: {
-            /** @description Success message */
-            message?: string;
-        };
-        HealthResponse: {
-            /** @description Health status */
-            status?: string;
-            /**
-             * Format: date-time
-             * @description Timestamp
-             */
-            timestamp?: string;
-        };
+  schemas: {
+    User: {
+      /** @description User ID */
+      id?: string;
+      /**
+       * Format: email
+       * @description User email
+       */
+      email?: string;
+      /** @description User name */
+      name?: string;
+      /** @description User profile image URL */
+      profileImage?: string;
+      /** @description GitHub ID */
+      githubId?: string;
+      /** @description Google ID */
+      googleId?: string;
     };
+    UserJoinRequest: {
+      /**
+       * Format: email
+       * @description User email
+       */
+      email: string;
+      /** @description User name */
+      name: string;
+      /** @description User profile image URL */
+      profileImage?: string;
+      /** @description GitHub ID */
+      githubId?: string;
+      /** @description Google ID */
+      googleId?: string;
+    };
+    UserCheckRequest: {
+      /**
+       * Format: email
+       * @description User email
+       */
+      email?: string;
+      /** @description GitHub ID */
+      githubId?: string;
+      /** @description Google ID */
+      googleId?: string;
+    };
+    Error: {
+      /** @description Error message */
+      error?: string;
+    };
+    SuccessResponse: {
+      /** @description Success message */
+      message?: string;
+    };
+    HealthResponse: {
+      /** @description Health status */
+      status?: string;
+      /**
+       * Format: date-time
+       * @description Timestamp
+       */
+      timestamp?: string;
+    };
+  };
 }
-export type SchemaUser = components['schemas']['User'];
-export type SchemaUserJoinRequest = components['schemas']['UserJoinRequest'];
-export type SchemaUserCheckRequest = components['schemas']['UserCheckRequest'];
-export type SchemaError = components['schemas']['Error'];
-export type SchemaSuccessResponse = components['schemas']['SuccessResponse'];
-export type SchemaHealthResponse = components['schemas']['HealthResponse'];
+export type SchemaUser = components["schemas"]["User"];
+export type SchemaUserJoinRequest = components["schemas"]["UserJoinRequest"];
+export type SchemaUserCheckRequest = components["schemas"]["UserCheckRequest"];
+export type SchemaError = components["schemas"]["Error"];
+export type SchemaSuccessResponse = components["schemas"]["SuccessResponse"];
+export type SchemaHealthResponse = components["schemas"]["HealthResponse"];

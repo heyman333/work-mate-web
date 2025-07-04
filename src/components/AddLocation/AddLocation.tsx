@@ -13,12 +13,19 @@ import {
 import { FaPlus, FaTimes, FaMapMarkerAlt } from "react-icons/fa";
 import { usePlaceSearch } from "@/hooks/usePlaceSearch";
 import type { PlaceSearchResult } from "@/hooks/usePlaceSearch";
+import {
+  type WorkPlaceCreateRequest,
+  type WorkplaceCreateData,
+} from "@/api/api";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import api from "@/utils/api";
 
-interface AddLocationProps {
-  onAddLocation: (place: PlaceSearchResult, activity: string) => void;
-}
+import { toaster } from "../ui/toaster";
+import type { AxiosError } from "axios";
 
-export function AddLocation({ onAddLocation }: AddLocationProps) {
+export function AddLocation() {
+  const queryClient = useQueryClient();
+
   const [isOpen, setIsOpen] = useState(false);
   const [keyword, setKeyword] = useState("");
   const [selectedPlace, setSelectedPlace] = useState<PlaceSearchResult | null>(
@@ -27,15 +34,40 @@ export function AddLocation({ onAddLocation }: AddLocationProps) {
   const [activity, setActivity] = useState("");
 
   const { results, loading, error, searchPlaces } = usePlaceSearch();
+  const { mutate: addLocation } = useMutation({
+    mutationFn: (data: WorkPlaceCreateRequest) => {
+      return api.post<WorkplaceCreateData>("/workplace", data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["workplaces"] });
+      toaster.create({
+        type: "success",
+        title: "Success",
+        description: "장소가 추가되었습니다.",
+      });
+    },
+    onError: (error: AxiosError<{ error: string }>) => {
+      toaster.create({
+        type: "error",
+        title: "Error",
+        description: error.response?.data.error || "Unknown error",
+      });
+    },
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedPlace && activity.trim()) {
-      onAddLocation(selectedPlace, activity.trim());
       setKeyword("");
       setSelectedPlace(null);
       setActivity("");
       setIsOpen(false);
+      addLocation({
+        name: selectedPlace.place_name,
+        latitude: Number(selectedPlace.y),
+        longitude: Number(selectedPlace.x),
+        description: activity,
+      });
     }
   };
 
@@ -52,13 +84,15 @@ export function AddLocation({ onAddLocation }: AddLocationProps) {
         aria-label="장소 추가"
         onClick={() => setIsOpen(true)}
         position="fixed"
-        bottom="6"
+        bottom="20"
         right="6"
         size="lg"
         colorScheme="blue"
         borderRadius="full"
         shadow="lg"
         zIndex={10}
+        width="46px"
+        height="46px"
       >
         <FaPlus />
       </IconButton>
