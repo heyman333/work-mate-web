@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 
-interface PlaceSearchResult {
+export interface PlaceSearchResult {
   place_name: string;
   road_address_name: string;
   address_name: string;
