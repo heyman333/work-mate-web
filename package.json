@@ -8,6 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
+    "type-test": "tsc --noEmit",
     "generate-types": "swagger-typescript-api generate -p http://localhost:3000/swagger.yaml -o src/api -n api.ts --extract-request-params --extract-request-body --extract-response-body --extract-response-error --templates templates"
   },
   "dependencies": {
