@@ -10,6 +10,7 @@ const GithubAuthCallbackPage = lazy(
   () => import("../pages/GithubAuthCallback")
 );
 const JoinPage = lazy(() => import("../pages/Join"));
+const MyPage = lazy(() => import("../pages/My"));
 
 export const root: RouteObject[] = [
   {
@@ -48,6 +49,14 @@ export const root: RouteObject[] = [
     element: (
       <Suspense>
         <JoinPage />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/my",
+    element: (
+      <Suspense>
+        <MyPage />
       </Suspense>
     ),
   },
