@@ -1,7 +1,7 @@
 import { useMemo } from "react";
-import { GetWorkplaceData } from "@/api/api";
+import { type GetWorkplaceData } from "@/api/api";
 
-export type WorkPlace = NonNullable<GetWorkplaceData['workPlaces']>[0];
+export type WorkPlace = NonNullable<GetWorkplaceData["workPlaces"]>[0];
 
 export type GroupedWorkPlace = {
   key: string;
@@ -10,7 +10,9 @@ export type GroupedWorkPlace = {
   workplaces: WorkPlace[];
 };
 
-export function useGroupedWorkPlaces(workPlaces?: WorkPlace[]): GroupedWorkPlace[] {
+export function useGroupedWorkPlaces(
+  workPlaces?: WorkPlace[]
+): GroupedWorkPlace[] {
   return useMemo(() => {
     if (!workPlaces) return [];
 
