@@ -26,6 +26,21 @@ export interface User {
   githubId?: string;
   /** Google ID */
   googleId?: string;
+  /** User's skill set */
+  skillSet?: string;
+  /** GitHub profile URL */
+  githubUrl?: string;
+  /** LinkedIn profile URL */
+  linkedinUrl?: string;
+  /** User's company/organization */
+  company?: string;
+  /** User's MBTI type */
+  mbti?: string;
+  /**
+   * User's collaboration goal (max 1000 characters)
+   * @maxLength 1000
+   */
+  collaborationGoal?: string;
 }
 
 export interface UserJoinRequest {
@@ -42,6 +57,21 @@ export interface UserJoinRequest {
   githubId?: string;
   /** Google ID */
   googleId?: string;
+  /** User's skill set */
+  skillSet?: string;
+  /** GitHub profile URL */
+  githubUrl?: string;
+  /** LinkedIn profile URL */
+  linkedinUrl?: string;
+  /** User's company/organization */
+  company?: string;
+  /** User's MBTI type */
+  mbti?: string;
+  /**
+   * User's collaboration goal (max 1000 characters)
+   * @maxLength 1000
+   */
+  collaborationGoal?: string;
 }
 
 export interface UserCheckRequest {
@@ -54,6 +84,21 @@ export interface UserCheckRequest {
   githubId?: string;
   /** Google ID */
   googleId?: string;
+  /** User's skill set */
+  skillSet?: string;
+  /** GitHub profile URL */
+  githubUrl?: string;
+  /** LinkedIn profile URL */
+  linkedinUrl?: string;
+  /** User's company/organization */
+  company?: string;
+  /** User's MBTI type */
+  mbti?: string;
+  /**
+   * User's collaboration goal (max 1000 characters)
+   * @maxLength 1000
+   */
+  collaborationGoal?: string;
 }
 
 export interface Error {
@@ -149,6 +194,35 @@ export interface GithubCallbackCreateData {
 }
 
 export type GithubCallbackCreateError = Error;
+
+export interface UpdateUpdatePayload {
+  /** User name */
+  name?: string;
+  /** User profile image URL */
+  profileImage?: string;
+  /** User's skill set */
+  skillSet?: string;
+  /** GitHub profile URL */
+  githubUrl?: string;
+  /** LinkedIn profile URL */
+  linkedinUrl?: string;
+  /** User's company/organization */
+  company?: string;
+  /** User's MBTI type */
+  mbti?: string;
+  /**
+   * User's collaboration goal (max 1000 characters)
+   * @maxLength 1000
+   */
+  collaborationGoal?: string;
+}
+
+export interface UpdateUpdateData {
+  message?: string;
+  user?: User;
+}
+
+export type UpdateUpdateError = Error;
 
 export interface WorkplaceCreatePayload {
   /** Name of the work place */
@@ -378,7 +452,6 @@ export class HttpClient<SecurityDataType = unknown> {
 
   public abortRequest = (cancelToken: CancelToken) => {
     const abortController = this.abortControllers.get(cancelToken);
-
     if (abortController) {
       abortController.abort();
       this.abortControllers.delete(cancelToken);
@@ -571,6 +644,26 @@ export class Api<
         path: `/auth/github/callback`,
         method: "POST",
         body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Auth
+     * @name UpdateUpdate
+     * @summary Update user information
+     * @request PUT:/auth/update
+     * @secure
+     */
+    updateUpdate: (data: UpdateUpdatePayload, params: RequestParams = {}) =>
+      this.request<UpdateUpdateData, UpdateUpdateError>({
+        path: `/auth/update`,
+        method: "PUT",
+        body: data,
+        secure: true,
         type: ContentType.Json,
         format: "json",
         ...params,
