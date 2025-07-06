@@ -3,6 +3,7 @@ import { FiHome, FiSearch, FiBookmark, FiSettings } from "react-icons/fi";
 import GoogleLoginButton from "../Auth/GoogleLoginButton";
 import GitHubLoginButton from "../Auth/GitHubLoginButton";
 import { useGetMe } from "../../hooks/useGetMe";
+import { Link } from "react-router-dom";
 
 interface LeftNavProps {
   width?: string;
@@ -28,13 +29,16 @@ function LeftNav({ width = "250px" }: LeftNavProps) {
           WorkMate
         </Text>
 
-        <Button
-          variant="ghost"
-          justifyContent="flex-start"
-          _hover={{ bg: "gray.100" }}
-        >
-          <FiHome style={{ marginRight: "8px" }} />홈
-        </Button>
+        <Link to="/">
+          <Button
+            w="100%"
+            variant="ghost"
+            justifyContent="flex-start"
+            _hover={{ bg: "gray.100" }}
+          >
+            <FiHome style={{ marginRight: "8px" }} />홈
+          </Button>
+        </Link>
 
         <Button
           variant="ghost"
@@ -66,21 +70,23 @@ function LeftNav({ width = "250px" }: LeftNavProps) {
         {!isLoading && user && (
           <>
             <Box height="1px" bg="gray.200" my={4} />
-            <HStack
-              gap={3}
-              p={2}
-              borderRadius="md"
-              _hover={{ bg: "gray.50" }}
-              cursor="pointer"
-            >
-              <Avatar.Root>
-                <Avatar.Fallback name={user.data?.user?.name} />
-                <Avatar.Image src={user.data?.user?.profileImage} />
-              </Avatar.Root>
-              <Text fontSize="sm" fontWeight="medium" truncate>
-                {user.data?.user?.name}
-              </Text>
-            </HStack>
+            <Link to={`/my`}>
+              <HStack
+                gap={3}
+                p={2}
+                borderRadius="md"
+                _hover={{ bg: "gray.50" }}
+                cursor="pointer"
+              >
+                <Avatar.Root>
+                  <Avatar.Fallback name={user.data?.user?.name} />
+                  <Avatar.Image src={user.data?.user?.profileImage} />
+                </Avatar.Root>
+                <Text fontSize="sm" fontWeight="medium" truncate>
+                  {user.data?.user?.name}
+                </Text>
+              </HStack>
+            </Link>
           </>
         )}
 

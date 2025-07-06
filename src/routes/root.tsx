@@ -26,6 +26,14 @@ export const root: RouteObject[] = [
         ),
         shouldRevalidate: () => true,
       },
+      {
+        path: "/my",
+        element: (
+          <Suspense>
+            <MyPage />
+          </Suspense>
+        ),
+      },
     ],
   },
   {
@@ -52,14 +60,7 @@ export const root: RouteObject[] = [
       </Suspense>
     ),
   },
-  {
-    path: "/my",
-    element: (
-      <Suspense>
-        <MyPage />
-      </Suspense>
-    ),
-  },
+
   {
     path: "/404",
     element: <div>404 Not Found</div>,

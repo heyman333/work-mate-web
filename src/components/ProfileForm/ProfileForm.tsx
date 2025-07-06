@@ -17,6 +17,7 @@ import {
   Badge,
 } from "@chakra-ui/react";
 import { FiUpload } from "react-icons/fi";
+import { useGetMe } from "@/hooks/useGetMe";
 
 interface ProfileFormData {
   // 기본 신상 정보
@@ -27,41 +28,41 @@ interface ProfileFormData {
   email: string;
   phone: string;
   workLocation: string;
-  
+
   // 전문 분야 & 스킬/기술
   expertise: string[];
   skills: string[];
   programmingLanguages: string[];
-  
+
   // 멘토링/협업 목표
   learningGoals: string[];
   careerGoals: string[];
   projectExperience: string;
-  
+
   // 경력/경험 수준
   totalExperience: number;
   expertiseLevel: string;
-  
+
   // 가용성 정보
   availableTimeSlots: string[];
   frequency: string;
-  
+
   // 매칭 선호도 & 스타일
   matchingPreference: string;
-  
+
   // 다양성 & 포용성 관련 데이터
   gender: string;
   culturalBackground: string;
   languages: string[];
   affinity: string[];
-  
+
   // 커뮤니케이션 스타일
   communicationStyle: string[];
-  
+
   // 성격 및 심리적 특징
   problemSolvingStyle: string;
   personalityType: string;
-  
+
   // 기타 관심사
   hobbies: string[];
   readingInterests: string[];
@@ -69,6 +70,7 @@ interface ProfileFormData {
 }
 
 export const ProfileForm = () => {
+  const { data: user } = useGetMe();
   const [formData, setFormData] = useState<ProfileFormData>({
     name: "",
     photo: null,
@@ -150,23 +152,35 @@ export const ProfileForm = () => {
     alert("프로필이 저장되었습니다.");
   };
 
-  const handleCheckboxChange = (field: keyof ProfileFormData, value: string, checked: boolean) => {
+  const handleCheckboxChange = (
+    field: keyof ProfileFormData,
+    value: string,
+    checked: boolean
+  ) => {
     const currentValue = formData[field] as string[];
     if (checked) {
       handleInputChange(field, [...currentValue, value]);
     } else {
-      handleInputChange(field, currentValue.filter(item => item !== value));
+      handleInputChange(
+        field,
+        currentValue.filter((item) => item !== value)
+      );
     }
   };
 
-  const FormField = ({ label, required = false, children }: { 
-    label: string; 
-    required?: boolean; 
+  const FormField = ({
+    label,
+    required = false,
+    children,
+  }: {
+    label: string;
+    required?: boolean;
     children: React.ReactNode;
   }) => (
     <Box>
       <Text mb={2} fontWeight="medium">
-        {label}{required && " *"}
+        {label}
+        {required && " *"}
       </Text>
       {children}
     </Box>
@@ -181,7 +195,7 @@ export const ProfileForm = () => {
   }) => {
     const currentValue = formData[field];
     const tags = Array.isArray(currentValue) ? currentValue : [];
-    
+
     return (
       <VStack align="stretch" gap={2}>
         <HStack>
@@ -275,7 +289,11 @@ export const ProfileForm = () => {
                               <img
                                 src={URL.createObjectURL(formData.photo)}
                                 alt="Profile"
-                                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                                style={{
+                                  width: "100%",
+                                  height: "100%",
+                                  objectFit: "cover",
+                                }}
                               />
                             ) : (
                               <Text color="gray.500">사진 없음</Text>
@@ -288,7 +306,10 @@ export const ProfileForm = () => {
                             style={{ display: "none" }}
                             id="photo-upload"
                           />
-                          <label htmlFor="photo-upload" style={{ cursor: "pointer" }}>
+                          <label
+                            htmlFor="photo-upload"
+                            style={{ cursor: "pointer" }}
+                          >
                             <Button size="sm" as="span">
                               <FiUpload /> 사진 업로드
                             </Button>
@@ -300,7 +321,9 @@ export const ProfileForm = () => {
                       <FormField label="이름" required>
                         <Input
                           value={formData.name}
-                          onChange={(e) => handleInputChange("name", e.target.value)}
+                          onChange={(e) =>
+                            handleInputChange("name", e.target.value)
+                          }
                           placeholder="이름을 입력하세요"
                         />
                       </FormField>
@@ -309,7 +332,9 @@ export const ProfileForm = () => {
                       <FormField label="직책" required>
                         <Input
                           value={formData.position}
-                          onChange={(e) => handleInputChange("position", e.target.value)}
+                          onChange={(e) =>
+                            handleInputChange("position", e.target.value)
+                          }
                           placeholder="직책을 입력하세요"
                         />
                       </FormField>
@@ -318,7 +343,9 @@ export const ProfileForm = () => {
                       <FormField label="부서" required>
                         <Input
                           value={formData.department}
-                          onChange={(e) => handleInputChange("department", e.target.value)}
+                          onChange={(e) =>
+                            handleInputChange("department", e.target.value)
+                          }
                           placeholder="부서를 입력하세요"
                         />
                       </FormField>
@@ -326,9 +353,12 @@ export const ProfileForm = () => {
                     <GridItem>
                       <FormField label="이메일" required>
                         <Input
+                          defaultValue={user?.data?.user?.email}
                           type="email"
                           value={formData.email}
-                          onChange={(e) => handleInputChange("email", e.target.value)}
+                          onChange={(e) =>
+                            handleInputChange("email", e.target.value)
+                          }
                           placeholder="이메일을 입력하세요"
                         />
                       </FormField>
@@ -337,7 +367,9 @@ export const ProfileForm = () => {
                       <FormField label="연락처">
                         <Input
                           value={formData.phone}
-                          onChange={(e) => handleInputChange("phone", e.target.value)}
+                          onChange={(e) =>
+                            handleInputChange("phone", e.target.value)
+                          }
                           placeholder="연락처를 입력하세요"
                         />
                       </FormField>
@@ -346,7 +378,9 @@ export const ProfileForm = () => {
                       <FormField label="근무 위치">
                         <Input
                           value={formData.workLocation}
-                          onChange={(e) => handleInputChange("workLocation", e.target.value)}
+                          onChange={(e) =>
+                            handleInputChange("workLocation", e.target.value)
+                          }
                           placeholder="근무 위치를 입력하세요"
                         />
                       </FormField>
@@ -362,13 +396,22 @@ export const ProfileForm = () => {
                 <VStack gap={6} align="stretch">
                   <Heading size="md">전문 분야 & 스킬/기술</Heading>
                   <FormField label="전문 분야">
-                    <TagInput field="expertise" placeholder="예: 전략 기획, 마케팅, 데이터 분석" />
+                    <TagInput
+                      field="expertise"
+                      placeholder="예: 전략 기획, 마케팅, 데이터 분석"
+                    />
                   </FormField>
                   <FormField label="스킬/기술">
-                    <TagInput field="skills" placeholder="예: Excel, PowerPoint, Tableau" />
+                    <TagInput
+                      field="skills"
+                      placeholder="예: Excel, PowerPoint, Tableau"
+                    />
                   </FormField>
                   <FormField label="프로그래밍 언어">
-                    <TagInput field="programmingLanguages" placeholder="예: Python, JavaScript, Java" />
+                    <TagInput
+                      field="programmingLanguages"
+                      placeholder="예: Python, JavaScript, Java"
+                    />
                   </FormField>
                 </VStack>
               </Box>
@@ -380,15 +423,23 @@ export const ProfileForm = () => {
                 <VStack gap={6} align="stretch">
                   <Heading size="md">멘토링/협업 목표</Heading>
                   <FormField label="배우고 싶은 내용">
-                    <TagInput field="learningGoals" placeholder="예: 리더십, 프로젝트 관리, 신기술" />
+                    <TagInput
+                      field="learningGoals"
+                      placeholder="예: 리더십, 프로젝트 관리, 신기술"
+                    />
                   </FormField>
                   <FormField label="경력 발전 목표">
-                    <TagInput field="careerGoals" placeholder="예: 팀 리더 승진, 해외 업무 경험" />
+                    <TagInput
+                      field="careerGoals"
+                      placeholder="예: 팀 리더 승진, 해외 업무 경험"
+                    />
                   </FormField>
                   <FormField label="프로젝트 경험">
                     <Textarea
                       value={formData.projectExperience}
-                      onChange={(e) => handleInputChange("projectExperience", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("projectExperience", e.target.value)
+                      }
                       placeholder="주요 프로젝트 경험을 자세히 설명해주세요"
                       rows={4}
                     />
@@ -408,7 +459,12 @@ export const ProfileForm = () => {
                         <Input
                           type="number"
                           value={formData.totalExperience}
-                          onChange={(e) => handleInputChange("totalExperience", parseInt(e.target.value) || 0)}
+                          onChange={(e) =>
+                            handleInputChange(
+                              "totalExperience",
+                              parseInt(e.target.value) || 0
+                            )
+                          }
                           min={0}
                           max={50}
                         />
@@ -418,13 +474,15 @@ export const ProfileForm = () => {
                       <FormField label="전문 분야 숙련도">
                         <select
                           value={formData.expertiseLevel}
-                          onChange={(e) => handleInputChange("expertiseLevel", e.target.value)}
+                          onChange={(e) =>
+                            handleInputChange("expertiseLevel", e.target.value)
+                          }
                           style={{
                             width: "100%",
                             padding: "8px 12px",
                             border: "1px solid #E2E8F0",
                             borderRadius: "6px",
-                            fontSize: "16px"
+                            fontSize: "16px",
                           }}
                         >
                           <option value="">선택하세요</option>
@@ -447,38 +505,66 @@ export const ProfileForm = () => {
                   <Heading size="md">가용성 정보</Heading>
                   <FormField label="협업 가능한 시간대">
                     <Stack direction="row" wrap="wrap" gap={4}>
-                      {["morning", "afternoon", "evening", "night"].map((time) => (
-                        <label key={time} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                          <input
-                            type="checkbox"
-                            checked={formData.availableTimeSlots.includes(time)}
-                            onChange={(e) => handleCheckboxChange("availableTimeSlots", time, e.target.checked)}
-                          />
-                          {time === "morning" && "오전 (9-12시)"}
-                          {time === "afternoon" && "오후 (12-18시)"}
-                          {time === "evening" && "저녁 (18-21시)"}
-                          {time === "night" && "야간 (21시 이후)"}
-                        </label>
-                      ))}
+                      {["morning", "afternoon", "evening", "night"].map(
+                        (time) => (
+                          <label
+                            key={time}
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "8px",
+                            }}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={formData.availableTimeSlots.includes(
+                                time
+                              )}
+                              onChange={(e) =>
+                                handleCheckboxChange(
+                                  "availableTimeSlots",
+                                  time,
+                                  e.target.checked
+                                )
+                              }
+                            />
+                            {time === "morning" && "오전 (9-12시)"}
+                            {time === "afternoon" && "오후 (12-18시)"}
+                            {time === "evening" && "저녁 (18-21시)"}
+                            {time === "night" && "야간 (21시 이후)"}
+                          </label>
+                        )
+                      )}
                     </Stack>
                   </FormField>
                   <FormField label="만남 빈도">
                     <Stack direction="row" wrap="wrap" gap={4}>
-                      {["weekly", "biweekly", "monthly", "quarterly"].map((freq) => (
-                        <label key={freq} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                          <input
-                            type="radio"
-                            name="frequency"
-                            value={freq}
-                            checked={formData.frequency === freq}
-                            onChange={(e) => handleInputChange("frequency", e.target.value)}
-                          />
-                          {freq === "weekly" && "주 1회"}
-                          {freq === "biweekly" && "격주 1회"}
-                          {freq === "monthly" && "월 1회"}
-                          {freq === "quarterly" && "분기 1회"}
-                        </label>
-                      ))}
+                      {["weekly", "biweekly", "monthly", "quarterly"].map(
+                        (freq) => (
+                          <label
+                            key={freq}
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "8px",
+                            }}
+                          >
+                            <input
+                              type="radio"
+                              name="frequency"
+                              value={freq}
+                              checked={formData.frequency === freq}
+                              onChange={(e) =>
+                                handleInputChange("frequency", e.target.value)
+                              }
+                            />
+                            {freq === "weekly" && "주 1회"}
+                            {freq === "biweekly" && "격주 1회"}
+                            {freq === "monthly" && "월 1회"}
+                            {freq === "quarterly" && "분기 1회"}
+                          </label>
+                        )
+                      )}
                     </Stack>
                   </FormField>
                 </VStack>
@@ -493,17 +579,30 @@ export const ProfileForm = () => {
                   <FormField label="매칭 방식 선호도">
                     <Stack gap={4}>
                       {["self", "admin", "algorithm"].map((method) => (
-                        <label key={method} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                        <label
+                          key={method}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "8px",
+                          }}
+                        >
                           <input
                             type="radio"
                             name="matchingPreference"
                             value={method}
                             checked={formData.matchingPreference === method}
-                            onChange={(e) => handleInputChange("matchingPreference", e.target.value)}
+                            onChange={(e) =>
+                              handleInputChange(
+                                "matchingPreference",
+                                e.target.value
+                              )
+                            }
                           />
                           {method === "self" && "Self-match (스스로 선택)"}
                           {method === "admin" && "Admin-match (관리자 추천)"}
-                          {method === "algorithm" && "Algorithm-match (알고리즘 자동 매칭)"}
+                          {method === "algorithm" &&
+                            "Algorithm-match (알고리즘 자동 매칭)"}
                         </label>
                       ))}
                     </Stack>
@@ -525,20 +624,24 @@ export const ProfileForm = () => {
                       <FormField label="성별">
                         <select
                           value={formData.gender}
-                          onChange={(e) => handleInputChange("gender", e.target.value)}
+                          onChange={(e) =>
+                            handleInputChange("gender", e.target.value)
+                          }
                           style={{
                             width: "100%",
                             padding: "8px 12px",
                             border: "1px solid #E2E8F0",
                             borderRadius: "6px",
-                            fontSize: "16px"
+                            fontSize: "16px",
                           }}
                         >
                           <option value="">선택하세요</option>
                           <option value="male">남성</option>
                           <option value="female">여성</option>
                           <option value="other">기타</option>
-                          <option value="prefer-not-to-say">답변하지 않음</option>
+                          <option value="prefer-not-to-say">
+                            답변하지 않음
+                          </option>
                         </select>
                       </FormField>
                     </GridItem>
@@ -546,19 +649,30 @@ export const ProfileForm = () => {
                       <FormField label="문화 배경">
                         <Input
                           value={formData.culturalBackground}
-                          onChange={(e) => handleInputChange("culturalBackground", e.target.value)}
+                          onChange={(e) =>
+                            handleInputChange(
+                              "culturalBackground",
+                              e.target.value
+                            )
+                          }
                           placeholder="예: 한국, 미국, 중국"
                         />
                       </FormField>
                     </GridItem>
                     <GridItem colSpan={2}>
                       <FormField label="사용 가능한 언어">
-                        <TagInput field="languages" placeholder="예: 한국어, 영어, 중국어" />
+                        <TagInput
+                          field="languages"
+                          placeholder="예: 한국어, 영어, 중국어"
+                        />
                       </FormField>
                     </GridItem>
                     <GridItem colSpan={2}>
                       <FormField label="소속 그룹/커뮤니티">
-                        <TagInput field="affinity" placeholder="예: 여성 개발자 모임, 스타트업 네트워크" />
+                        <TagInput
+                          field="affinity"
+                          placeholder="예: 여성 개발자 모임, 스타트업 네트워크"
+                        />
                       </FormField>
                     </GridItem>
                   </Grid>
@@ -573,19 +687,42 @@ export const ProfileForm = () => {
                   <Heading size="md">커뮤니케이션 스타일</Heading>
                   <FormField label="선호하는 협업 방식">
                     <Stack gap={3}>
-                      {["text-chat", "video-call", "voice-call", "offline-meeting", "email", "collaborative-tools"].map((style) => (
-                        <label key={style} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      {[
+                        "text-chat",
+                        "video-call",
+                        "voice-call",
+                        "offline-meeting",
+                        "email",
+                        "collaborative-tools",
+                      ].map((style) => (
+                        <label
+                          key={style}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "8px",
+                          }}
+                        >
                           <input
                             type="checkbox"
-                            checked={formData.communicationStyle.includes(style)}
-                            onChange={(e) => handleCheckboxChange("communicationStyle", style, e.target.checked)}
+                            checked={formData.communicationStyle.includes(
+                              style
+                            )}
+                            onChange={(e) =>
+                              handleCheckboxChange(
+                                "communicationStyle",
+                                style,
+                                e.target.checked
+                              )
+                            }
                           />
                           {style === "text-chat" && "텍스트 채팅"}
                           {style === "video-call" && "화상 회의"}
                           {style === "voice-call" && "음성 통화"}
                           {style === "offline-meeting" && "오프라인 미팅"}
                           {style === "email" && "이메일"}
-                          {style === "collaborative-tools" && "협업 도구 (Slack, Teams 등)"}
+                          {style === "collaborative-tools" &&
+                            "협업 도구 (Slack, Teams 등)"}
                         </label>
                       ))}
                     </Stack>
@@ -604,13 +741,18 @@ export const ProfileForm = () => {
                       <FormField label="문제 해결 스타일">
                         <select
                           value={formData.problemSolvingStyle}
-                          onChange={(e) => handleInputChange("problemSolvingStyle", e.target.value)}
+                          onChange={(e) =>
+                            handleInputChange(
+                              "problemSolvingStyle",
+                              e.target.value
+                            )
+                          }
                           style={{
                             width: "100%",
                             padding: "8px 12px",
                             border: "1px solid #E2E8F0",
                             borderRadius: "6px",
-                            fontSize: "16px"
+                            fontSize: "16px",
                           }}
                         >
                           <option value="">선택하세요</option>
@@ -626,7 +768,9 @@ export const ProfileForm = () => {
                       <FormField label="성향 테스트 결과">
                         <Input
                           value={formData.personalityType}
-                          onChange={(e) => handleInputChange("personalityType", e.target.value)}
+                          onChange={(e) =>
+                            handleInputChange("personalityType", e.target.value)
+                          }
                           placeholder="예: ENFP, DISC-I"
                         />
                       </FormField>
@@ -642,13 +786,22 @@ export const ProfileForm = () => {
                 <VStack gap={6} align="stretch">
                   <Heading size="md">기타 관심사</Heading>
                   <FormField label="취미">
-                    <TagInput field="hobbies" placeholder="예: 독서, 운동, 여행, 음악" />
+                    <TagInput
+                      field="hobbies"
+                      placeholder="예: 독서, 운동, 여행, 음악"
+                    />
                   </FormField>
                   <FormField label="독서 관심 분야">
-                    <TagInput field="readingInterests" placeholder="예: 비즈니스, 자기계발, 소설, 과학" />
+                    <TagInput
+                      field="readingInterests"
+                      placeholder="예: 비즈니스, 자기계발, 소설, 과학"
+                    />
                   </FormField>
                   <FormField label="소셜 활동">
-                    <TagInput field="socialActivities" placeholder="예: 봉사활동, 스터디 모임, 동호회" />
+                    <TagInput
+                      field="socialActivities"
+                      placeholder="예: 봉사활동, 스터디 모임, 동호회"
+                    />
                   </FormField>
                 </VStack>
               </Box>
@@ -660,7 +813,11 @@ export const ProfileForm = () => {
               <Button type="submit" colorScheme="blue" size="lg">
                 프로필 저장
               </Button>
-              <Button variant="outline" size="lg" onClick={() => window.history.back()}>
+              <Button
+                variant="outline"
+                size="lg"
+                onClick={() => window.history.back()}
+              >
                 취소
               </Button>
             </HStack>
