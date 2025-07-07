@@ -37,7 +37,7 @@ const profileFormSchema = z.object({
   mbti: z.string().min(1, "MBTI를 입력해주세요").optional().or(z.literal("")),
   collaborationGoal: z
     .string()
-    .min(1, "협업을 통해 이루고자 하는 것을 입력해주세요")
+    .min(1, "협업하고 싶은 분야을 입력해주세요")
     .optional()
     .or(z.literal("")),
 });
@@ -190,7 +190,7 @@ export const ProfileForm = () => {
                   </Field.Root>
 
                   <Field.Root>
-                    <Field.Label>협업을 통해 이루고자 하는 것</Field.Label>
+                    <Field.Label>협업하고 싶은 분야</Field.Label>
                     <Textarea
                       {...register("collaborationGoal")}
                       placeholder="예: 새로운 기술 스택 습득, 네트워킹, 프로젝트 경험 쌓기, 멘토링 등"

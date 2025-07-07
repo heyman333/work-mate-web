@@ -7,7 +7,7 @@ export type GroupedWorkPlace = {
   key: string;
   latitude: number;
   longitude: number;
-  workplaces: WorkPlace[];
+  workplaces: (WorkPlace & { colorPalette: string })[];
 };
 
 export function useGroupedWorkPlaces(
@@ -26,11 +26,26 @@ export function useGroupedWorkPlaces(
       groups.get(key)!.push(workplace);
     });
 
-    return Array.from(groups.entries()).map(([key, workplaces]) => ({
+    const randomColorPalettes = Array.from({ length: 10 }, () => {
+      const colorPalettes = [
+        "blue",
+        "green",
+        "red",
+        "purple",
+        "orange",
+        "yellow",
+      ];
+      return colorPalettes[Math.floor(Math.random() * colorPalettes.length)];
+    });
+
+    return Array.from(groups.entries()).map(([key, workplaces], index) => ({
       key,
       latitude: workplaces[0].latitude ?? 0,
       longitude: workplaces[0].longitude ?? 0,
-      workplaces,
+      workplaces: workplaces.map((workplace) => ({
+        ...workplace,
+        colorPalette: randomColorPalettes[index % randomColorPalettes.length],
+      })),
     }));
   }, [workPlaces]);
 }

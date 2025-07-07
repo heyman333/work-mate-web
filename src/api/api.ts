@@ -270,6 +270,20 @@ export interface GetWorkplaceData {
       name?: string;
       email?: string;
       profileImage?: string;
+      githubId?: string;
+      googleId?: string;
+      skillSet?: string;
+      githubUrl?: string;
+      linkedinUrl?: string;
+      company?: string;
+      mbti?: string;
+      collaborationGoal?: string;
+      /** @format date-time */
+      createdAt?: string;
+      /** @format date-time */
+      updatedAt?: string;
+      /** @format date-time */
+      lastLoginAt?: string;
     };
   }[];
 }
