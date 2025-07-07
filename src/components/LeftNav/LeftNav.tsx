@@ -46,25 +46,7 @@ function LeftNav({ width = "250px" }: LeftNavProps) {
           _hover={{ bg: "gray.100" }}
         >
           <FiSearch style={{ marginRight: "8px" }} />
-          검색
-        </Button>
-
-        <Button
-          variant="ghost"
-          justifyContent="flex-start"
-          _hover={{ bg: "gray.100" }}
-        >
-          <FiBookmark style={{ marginRight: "8px" }} />
-          즐겨찾기
-        </Button>
-
-        <Button
-          variant="ghost"
-          justifyContent="flex-start"
-          _hover={{ bg: "gray.100" }}
-        >
-          <FiSettings style={{ marginRight: "8px" }} />
-          설정
+          워크로그
         </Button>
 
         {!isLoading && user && (
