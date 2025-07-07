@@ -1,5 +1,5 @@
 import { Box, VStack, Text, Button, HStack, Avatar } from "@chakra-ui/react";
-import { FiHome, FiSearch, FiBookmark, FiSettings } from "react-icons/fi";
+import { FiHome, FiSearch } from "react-icons/fi";
 import GoogleLoginButton from "../Auth/GoogleLoginButton";
 import GitHubLoginButton from "../Auth/GitHubLoginButton";
 import { useGetMe } from "../../hooks/useGetMe";
