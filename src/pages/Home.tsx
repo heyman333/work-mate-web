@@ -8,6 +8,7 @@ import { Api } from "@/api/api";
 import { useGroupedWorkPlaces } from "../hooks/useGroupedWorkPlaces";
 import { CreatorModal } from "../components/CreatorModal/CreatorModal";
 import { type GetWorkplaceData } from "../api/api";
+import { useGetLastMapPosition } from "../hooks/useGetLastMapPosition";
 
 type WorkPlace = NonNullable<GetWorkplaceData["workPlaces"]>[number];
 
@@ -19,9 +20,10 @@ const ringCss = defineStyle({
 });
 
 function Home() {
+  const { savePosition, getPosition } = useGetLastMapPosition();
   const [mapCenter, setMapCenter] = useState({
-    lat: 37.394946,
-    lng: 127.110828,
+    lat: getPosition()?.lat ?? 37.394946,
+    lng: getPosition()?.lng ?? 127.110828,
   });
 
   const [modalState, setModalState] = useState<{
@@ -68,6 +70,15 @@ function Home() {
     });
   };
 
+  const handleCenterChanged = (map: kakao.maps.Map) => {
+    const position = {
+      lat: map.getCenter().getLat(),
+      lng: map.getCenter().getLng(),
+    }
+    setMapCenter(position);
+    savePosition(position);
+  };
+
   const groupedWorkPlaces = useGroupedWorkPlaces(data?.data.workPlaces);
 
   return (
@@ -81,7 +92,7 @@ function Home() {
         }));
       }}
     >
-      <Map center={mapCenter} style={{ width: "100%", height: "100vh" }}>
+      <Map center={mapCenter} style={{ width: "100%", height: "100vh" }} onCenterChanged={handleCenterChanged}>
         {groupedWorkPlaces.map((group) => {
           return (
             <CustomOverlayMap

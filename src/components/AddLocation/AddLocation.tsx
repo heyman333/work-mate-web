@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { FaPlus, FaTimes, FaMapMarkerAlt } from "react-icons/fa";
 import { usePlaceSearch } from "@/hooks/usePlaceSearch";
-import type { PlaceSearchResult } from "@/hooks/usePlaceSearch";
+import { type PlaceSearchResult } from "@/hooks/usePlaceSearch";
 import {
   type WorkPlaceCreateRequest,
   type WorkplaceCreateData,
