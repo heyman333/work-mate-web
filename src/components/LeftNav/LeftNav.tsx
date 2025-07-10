@@ -1,8 +1,9 @@
 import { Box, VStack, Text, Button, HStack, Avatar } from "@chakra-ui/react";
-import { FiHome, FiSearch } from "react-icons/fi";
+import { FiHome, FiSearch, FiLogOut } from "react-icons/fi";
 import GoogleLoginButton from "../Auth/GoogleLoginButton";
 import GitHubLoginButton from "../Auth/GitHubLoginButton";
 import { useGetMe } from "../../hooks/useGetMe";
+import { useLogout } from "../../hooks/useLogout";
 import { Link } from "react-router-dom";
 
 interface LeftNavProps {
@@ -11,6 +12,7 @@ interface LeftNavProps {
 
 function LeftNav({ width = "250px" }: LeftNavProps) {
   const { data: user, isLoading } = useGetMe();
+  const logout = useLogout();
 
   return (
     <Box
@@ -40,14 +42,17 @@ function LeftNav({ width = "250px" }: LeftNavProps) {
           </Button>
         </Link>
 
-        <Button
-          variant="ghost"
-          justifyContent="flex-start"
-          _hover={{ bg: "gray.100" }}
-        >
-          <FiSearch style={{ marginRight: "8px" }} />
-          워크로그
-        </Button>
+        <Link to="/worklog">
+          <Button
+            w="100%"
+            variant="ghost"
+            justifyContent="flex-start"
+            _hover={{ bg: "gray.100" }}
+          >
+            <FiSearch style={{ marginRight: "8px" }} />
+            워크로그
+          </Button>
+        </Link>
 
         {!isLoading && user && (
           <>
@@ -69,6 +74,16 @@ function LeftNav({ width = "250px" }: LeftNavProps) {
                 </Text>
               </HStack>
             </Link>
+            <Button
+              variant="ghost"
+              justifyContent="flex-start"
+              _hover={{ bg: "gray.100" }}
+              onClick={() => logout.mutate()}
+              loading={logout.isPending}
+            >
+              <FiLogOut style={{ marginRight: "8px" }} />
+              로그아웃
+            </Button>
           </>
         )}
 

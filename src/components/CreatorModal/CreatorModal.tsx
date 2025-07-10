@@ -23,6 +23,7 @@ import {
   MdLink,
 } from "react-icons/md";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
+import { format } from "date-fns";
 import { type GetWorkplaceData } from "../../api/api";
 
 type WorkPlace = NonNullable<GetWorkplaceData["workPlaces"]>[number];
@@ -50,8 +51,6 @@ export function CreatorModal({
   const goToNext = () => {
     setCurrentIndex((prev) => (prev < workplaces.length - 1 ? prev + 1 : 0));
   };
-
-  console.log("currentCreator", currentCreator);
 
   return (
     <Portal>
@@ -116,15 +115,20 @@ export function CreatorModal({
                             >
                               {currentWorkplace?.name}
                             </Text>
-                            {currentWorkplace?.description && (
-                              <Text
-                                fontSize="sm"
-                                color="gray.600"
-                                textAlign="center"
-                              >
-                                {currentWorkplace?.description}
-                              </Text>
-                            )}
+                            {currentWorkplace?.description &&
+                              currentWorkplace?.description.length > 0 &&
+                              currentWorkplace?.description.map((workspace) => (
+                                <HStack>
+                                  {workspace.date && (
+                                    <Text fontSize="sm" color="gray.600">
+                                      {format(workspace.date, "yyyy-MM-dd")}
+                                    </Text>
+                                  )}
+                                  <Text fontSize="sm" color="gray.600">
+                                    {workspace.content}
+                                  </Text>
+                                </HStack>
+                              ))}
                           </VStack>
                         )}
 

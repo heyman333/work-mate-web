@@ -130,8 +130,16 @@ export interface WorkPlace {
   latitude?: number;
   /** Longitude coordinate */
   longitude?: number;
-  /** Description of work being done at this place */
-  description?: string;
+  /** Array of descriptions with dates */
+  description?: {
+    /**
+     * Date of the description entry
+     * @format date-time
+     */
+    date: string;
+    /** Description content */
+    content: string;
+  }[];
   /**
    * Creation date
    * @format date-time
@@ -151,8 +159,16 @@ export interface WorkPlaceCreateRequest {
   latitude: number;
   /** Longitude coordinate */
   longitude: number;
-  /** Description of work being done at this place */
-  description?: string;
+  /** Array of descriptions with dates */
+  description?: {
+    /**
+     * Date of the description entry
+     * @format date-time
+     */
+    date: string;
+    /** Description content */
+    content: string;
+  }[];
 }
 
 export type LogoutCreateData = SuccessResponse;
@@ -231,8 +247,16 @@ export interface WorkplaceCreatePayload {
   latitude: number;
   /** Longitude of the work place */
   longitude: number;
-  /** Description of work being done at this place */
-  description?: string;
+  /** Array of descriptions with dates */
+  description?: {
+    /**
+     * Date of the description entry
+     * @format date-time
+     */
+    date: string;
+    /** Description content */
+    content: string;
+  }[];
 }
 
 export interface WorkplaceCreateData {
@@ -260,7 +284,16 @@ export interface GetWorkplaceData {
     name?: string;
     latitude?: number;
     longitude?: number;
-    description?: string;
+    /** Array of descriptions with dates */
+    description?: {
+      /**
+       * Date of the description entry
+       * @format date-time
+       */
+      date: string;
+      /** Description content */
+      content: string;
+    }[];
     /** @format date-time */
     createdAt?: string;
     /** @format date-time */
