@@ -9,15 +9,18 @@ import {
   Box,
   Text,
   Textarea,
+  CloseButton,
 } from "@chakra-ui/react";
-import { FaPlus, FaTimes, FaMapMarkerAlt } from "react-icons/fa";
+import { FaPlus, FaMapMarkerAlt } from "react-icons/fa";
 import { usePlaceSearch } from "@/hooks/usePlaceSearch";
 import { type PlaceSearchResult } from "@/hooks/usePlaceSearch";
 import {
+  Api,
   type WorkPlaceCreateRequest,
   type WorkplaceCreateData,
+  type WorkplaceUpdatePayload,
 } from "@/api/api";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import api from "@/utils/api";
 
 import { toaster } from "../ui/toaster";
@@ -34,6 +37,23 @@ export function AddLocation() {
   const [activity, setActivity] = useState("");
 
   const { results, loading, error, searchPlaces } = usePlaceSearch();
+  const { data: workplacesData } = useQuery({
+    queryKey: ["workplaceList"],
+    queryFn: () => new Api().workplace.workplaceList(),
+  });
+  const { mutate: updateLocation } = useMutation({
+    mutationFn: (data: { id: string; payload: WorkplaceUpdatePayload }) => {
+      return new Api().workplace.workplaceUpdate(data.id, data.payload);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["workplaces"] });
+      toaster.create({
+        type: "success",
+        title: "Success",
+        description: "장소가 수정되었습니다.",
+      });
+    },
+  });
   const { mutate: addLocation } = useMutation({
     mutationFn: (data: WorkPlaceCreateRequest) => {
       return api.post<WorkplaceCreateData>("/workplace", data);
@@ -55,8 +75,27 @@ export function AddLocation() {
     },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = () => {
+    const isDuplicated = workplacesData?.data?.workPlaces?.some(
+      (workplace) => workplace.name === selectedPlace?.place_name
+    );
+
+    if (isDuplicated) {
+      updateLocation({
+        id:
+          workplacesData?.data?.workPlaces?.find(
+            (workplace) => workplace.name === selectedPlace?.place_name
+          )?.id || "",
+        payload: {
+          name: selectedPlace?.place_name,
+          latitude: Number(selectedPlace?.y),
+          longitude: Number(selectedPlace?.x),
+          description: activity,
+        },
+      });
+
+      return;
+    }
     if (selectedPlace && activity.trim()) {
       setKeyword("");
       setSelectedPlace(null);
@@ -218,9 +257,7 @@ export function AddLocation() {
 
                   <HStack justify="flex-end" gap={2}>
                     <Dialog.CloseTrigger asChild>
-                      <IconButton>
-                        <FaTimes />
-                      </IconButton>
+                      <CloseButton />
                     </Dialog.CloseTrigger>
                     <Button
                       type="submit"

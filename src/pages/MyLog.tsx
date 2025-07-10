@@ -62,9 +62,9 @@ function MyLog() {
                   </Heading>
 
                   {workplace.description && (
-                    <VStack>
+                    <VStack align="start">
                       {workplace.description.map((description) => (
-                        <HStack>
+                        <HStack key={description.date}>
                           <Text color="gray.600" fontSize="sm">
                             {format(description.date, "yyyy-MM-dd")}
                           </Text>

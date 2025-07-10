@@ -74,7 +74,7 @@ function Home() {
     const position = {
       lat: map.getCenter().getLat(),
       lng: map.getCenter().getLng(),
-    }
+    };
     setMapCenter(position);
     savePosition(position);
   };
@@ -92,7 +92,11 @@ function Home() {
         }));
       }}
     >
-      <Map center={mapCenter} style={{ width: "100%", height: "100vh" }} onCenterChanged={handleCenterChanged}>
+      <Map
+        center={mapCenter}
+        style={{ width: "100%", height: "100vh" }}
+        onCenterChanged={handleCenterChanged}
+      >
         {groupedWorkPlaces.map((group) => {
           return (
             <CustomOverlayMap

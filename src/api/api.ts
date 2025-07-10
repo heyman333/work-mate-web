@@ -121,6 +121,17 @@ export interface HealthResponse {
   timestamp?: string;
 }
 
+export interface WorkPlaceCreateRequest {
+  /** Work place name */
+  name: string;
+  /** Latitude coordinate */
+  latitude: number;
+  /** Longitude coordinate */
+  longitude: number;
+  /** Description of the work place */
+  description?: string;
+}
+
 export interface WorkPlace {
   /** Work place ID */
   id?: string;
@@ -150,25 +161,6 @@ export interface WorkPlace {
    * @format date-time
    */
   updatedAt?: string;
-}
-
-export interface WorkPlaceCreateRequest {
-  /** Work place name */
-  name: string;
-  /** Latitude coordinate */
-  latitude: number;
-  /** Longitude coordinate */
-  longitude: number;
-  /** Array of descriptions with dates */
-  description?: {
-    /**
-     * Date of the description entry
-     * @format date-time
-     */
-    date: string;
-    /** Description content */
-    content: string;
-  }[];
 }
 
 export type LogoutCreateData = SuccessResponse;
@@ -247,16 +239,8 @@ export interface WorkplaceCreatePayload {
   latitude: number;
   /** Longitude of the work place */
   longitude: number;
-  /** Array of descriptions with dates */
-  description?: {
-    /**
-     * Date of the description entry
-     * @format date-time
-     */
-    date: string;
-    /** Description content */
-    content: string;
-  }[];
+  /** Description of the work place */
+  description?: string;
 }
 
 export interface WorkplaceCreateData {
@@ -277,6 +261,24 @@ export interface WorkplaceDeleteData {
 }
 
 export type WorkplaceDeleteError = Error;
+
+export interface WorkplaceUpdatePayload {
+  /** Name of the work place */
+  name?: string;
+  /** Latitude of the work place */
+  latitude?: number;
+  /** Longitude of the work place */
+  longitude?: number;
+  /** Description of the work place */
+  description?: string;
+}
+
+export interface WorkplaceUpdateData {
+  message?: string;
+  workPlace?: WorkPlace;
+}
+
+export type WorkplaceUpdateError = Error;
 
 export interface GetWorkplaceData {
   workPlaces?: {
@@ -772,6 +774,30 @@ export class Api<
         path: `/workplace/${id}`,
         method: "DELETE",
         secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags WorkPlace
+     * @name WorkplaceUpdate
+     * @summary Update a work place
+     * @request PUT:/workplace/{id}
+     * @secure
+     */
+    workplaceUpdate: (
+      id: string,
+      data: WorkplaceUpdatePayload,
+      params: RequestParams = {},
+    ) =>
+      this.request<WorkplaceUpdateData, WorkplaceUpdateError>({
+        path: `/workplace/${id}`,
+        method: "PUT",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
         format: "json",
         ...params,
       }),
