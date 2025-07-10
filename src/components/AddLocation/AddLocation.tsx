@@ -93,6 +93,7 @@ export function AddLocation() {
           description: activity,
         },
       });
+      setIsOpen(false);
 
       return;
     }
