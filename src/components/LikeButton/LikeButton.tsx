@@ -117,7 +117,7 @@ export function LikeButton({
     >
       {isLiked ? <MdFavorite color="red" /> : <MdFavoriteBorder />}
       <Text fontSize="sm" color={isLiked ? "red.400" : "gray.500"}>
-        {userData?.data.user?.likedByCount}
+        {userData?.data.user?.likedByCount ?? 0}
       </Text>
     </IconButton>
   );
