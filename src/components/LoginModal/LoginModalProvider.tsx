@@ -1,6 +1,9 @@
-import { ReactNode } from "react";
+import { type ReactNode } from "react";
 import { LoginModal } from "./LoginModal";
-import { LoginModalProvider, useLoginModal } from "../../contexts/LoginModalContext";
+import {
+  LoginModalProvider,
+  useLoginModal,
+} from "../../contexts/LoginModalContext";
 
 interface LoginModalWrapperProps {
   children: ReactNode;
