@@ -4,6 +4,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RootRouter } from "./routes/rootRouter.tsx";
 import { Toaster } from "./components/ui/toaster.tsx";
+import { GlobalLoginModalProvider } from "./components/LoginModal/LoginModalProvider.tsx";
 
 const queryClient = new QueryClient();
 
@@ -11,8 +12,10 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider>
       <QueryClientProvider client={queryClient}>
-        <RootRouter />
-        <Toaster />
+        <GlobalLoginModalProvider>
+          <RootRouter />
+          <Toaster />
+        </GlobalLoginModalProvider>
       </QueryClientProvider>
     </Provider>
   </StrictMode>

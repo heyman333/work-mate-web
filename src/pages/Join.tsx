@@ -12,17 +12,17 @@ import {
 } from "@chakra-ui/react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
-import api from "@/utils/api";
 import type { AxiosError } from "axios";
 import { toaster } from "@/components/ui/toaster";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { Api, type UserJoinRequest } from "@/api/api";
 
 const joinFormSchema = z.object({
   name: z.string().min(1, "이름을 입력해주세요"),
   email: z.string().email("올바른 이메일을 입력해주세요"),
-  skills: z
+  skillSet: z
     .string()
     .min(1, "스킬셋을 입력해주세요")
     .optional()
@@ -37,7 +37,7 @@ const joinFormSchema = z.object({
     .url("올바른 LinkedIn URL을 입력해주세요")
     .optional()
     .or(z.literal("")),
-  organization: z
+  company: z
     .string()
     .min(1, "소속(회사 또는 학교)을 입력해주세요")
     .optional()
@@ -69,27 +69,28 @@ const Join = () => {
     defaultValues: {
       name: defaultName,
       email: defaultEmail,
-      skills: "",
+      skillSet: "",
       githubUrl: "",
       linkedinUrl: "",
-      organization: "",
+      company: "",
       mbti: "",
       collaborationGoal: "",
     },
   });
 
   const { mutate: join } = useMutation({
-    mutationFn: (data: JoinFormData) => {
-      return api.post(`/auth/join`, {
+    mutationFn: (data: UserJoinRequest) => {
+      console.log(data);
+      return new Api().auth.joinCreate({
         email: data.email,
         name: data.name,
         profileImage: defaultProfileImage,
-        githubId: type === "github" ? searchParams.get("id") : "",
-        googleId: type === "google" ? searchParams.get("id") : "",
-        skills: data.skills,
+        githubId: type === "github" ? searchParams.get("id") || "" : undefined,
+        googleId: type === "google" ? searchParams.get("id") || "" : undefined,
+        skillSet: data.skillSet,
         githubUrl: data.githubUrl,
         linkedinUrl: data.linkedinUrl,
-        organization: data.organization,
+        company: data.company,
         mbti: data.mbti,
         collaborationGoal: data.collaborationGoal,
       });
@@ -106,7 +107,7 @@ const Join = () => {
     },
   });
 
-  const onSubmit = (data: JoinFormData) => {
+  const onSubmit = (data: UserJoinRequest) => {
     join(data);
   };
 
@@ -162,12 +163,14 @@ const Join = () => {
                   <Field.Root>
                     <Field.Label>가진 스킬셋</Field.Label>
                     <Textarea
-                      {...register("skills")}
+                      {...register("skillSet")}
                       placeholder="예: JavaScript, React, Node.js, Python, 데이터 분석, 디자인, 마케팅 등"
                       rows={3}
                     />
-                    {errors.skills && (
-                      <Field.ErrorText>{errors.skills.message}</Field.ErrorText>
+                    {errors.skillSet && (
+                      <Field.ErrorText>
+                        {errors.skillSet.message}
+                      </Field.ErrorText>
                     )}
                   </Field.Root>
 
@@ -202,12 +205,12 @@ const Join = () => {
                   <Field.Root>
                     <Field.Label>소속 (회사 또는 학교)</Field.Label>
                     <Input
-                      {...register("organization")}
+                      {...register("company")}
                       placeholder="예: 삼성전자, 서울대학교, 네이버 등"
                     />
-                    {errors.organization && (
+                    {errors.company && (
                       <Field.ErrorText>
-                        {errors.organization.message}
+                        {errors.company.message}
                       </Field.ErrorText>
                     )}
                   </Field.Root>

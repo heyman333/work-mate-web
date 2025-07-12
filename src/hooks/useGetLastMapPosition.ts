@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 interface MapPosition {
   lat: number;
@@ -6,7 +6,7 @@ interface MapPosition {
   level?: number;
 }
 
-const STORAGE_KEY = 'lastMapPosition';
+const STORAGE_KEY = "lastMapPosition";
 
 export const useGetLastMapPosition = () => {
   const [lastPosition, setLastPosition] = useState<MapPosition | null>(null);
@@ -16,7 +16,7 @@ export const useGetLastMapPosition = () => {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(position));
       setLastPosition(position);
     } catch (error) {
-      console.error('Failed to save map position:', error);
+      console.error("Failed to save map position:", error);
     }
   };
 
@@ -25,7 +25,7 @@ export const useGetLastMapPosition = () => {
       const saved = localStorage.getItem(STORAGE_KEY);
       return saved ? JSON.parse(saved) : null;
     } catch (error) {
-      console.error('Failed to get map position:', error);
+      console.error("Failed to get map position:", error);
       return null;
     }
   };
@@ -35,7 +35,7 @@ export const useGetLastMapPosition = () => {
       localStorage.removeItem(STORAGE_KEY);
       setLastPosition(null);
     } catch (error) {
-      console.error('Failed to clear map position:', error);
+      console.error("Failed to clear map position:", error);
     }
   };
 
@@ -48,6 +48,6 @@ export const useGetLastMapPosition = () => {
     lastPosition,
     savePosition,
     getPosition,
-    clearPosition
+    clearPosition,
   };
 };

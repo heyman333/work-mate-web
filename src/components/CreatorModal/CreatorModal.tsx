@@ -21,6 +21,7 @@ import {
   MdCode,
   MdGroup,
   MdLink,
+  MdHistory,
 } from "react-icons/md";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { format } from "date-fns";
@@ -115,20 +116,33 @@ export function CreatorModal({
                             >
                               {currentWorkplace?.name}
                             </Text>
-                            {currentWorkplace?.description &&
-                              currentWorkplace?.description.length > 0 &&
-                              currentWorkplace?.description.map((workspace) => (
-                                <HStack>
-                                  {workspace.date && (
-                                    <Text fontSize="sm" color="gray.600">
-                                      {format(workspace.date, "yyyy-MM-dd")}
-                                    </Text>
-                                  )}
-                                  <Text fontSize="sm" color="gray.600">
-                                    {workspace.content}
-                                  </Text>
-                                </HStack>
-                              ))}
+                            <HStack mt={2}>
+                              <MdHistory />
+                              <Text fontSize="md" fontWeight="medium">
+                                기록
+                              </Text>
+                            </HStack>
+                            <VStack>
+                              {currentWorkplace?.description &&
+                                currentWorkplace?.description.length > 0 &&
+                                currentWorkplace?.description.map(
+                                  (workspace) => (
+                                    <HStack width="full" key={workspace.date}>
+                                      {workspace.date && (
+                                        <Text fontSize="sm" color="gray.600">
+                                          {format(
+                                            workspace.date,
+                                            "yyyy년 MM월 dd일"
+                                          )}
+                                        </Text>
+                                      )}
+                                      <Text fontSize="sm" color="gray.600">
+                                        {workspace.content}
+                                      </Text>
+                                    </HStack>
+                                  )
+                                )}
+                            </VStack>
                           </VStack>
                         )}
 

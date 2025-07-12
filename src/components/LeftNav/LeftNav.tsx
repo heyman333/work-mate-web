@@ -5,6 +5,7 @@ import GitHubLoginButton from "../Auth/GitHubLoginButton";
 import { useGetMe } from "../../hooks/useGetMe";
 import { useLogout } from "../../hooks/useLogout";
 import { Link } from "react-router-dom";
+import { useLoginModal } from "@/contexts/LoginModalContext";
 
 interface LeftNavProps {
   width?: string;
@@ -12,7 +13,9 @@ interface LeftNavProps {
 
 function LeftNav({ width = "250px" }: LeftNavProps) {
   const { data: user, isLoading } = useGetMe();
+  const isLoggedIn = !!user?.data.user;
   const logout = useLogout();
+  const { openModal } = useLoginModal();
 
   return (
     <Box
@@ -48,6 +51,12 @@ function LeftNav({ width = "250px" }: LeftNavProps) {
             variant="ghost"
             justifyContent="flex-start"
             _hover={{ bg: "gray.100" }}
+            onClick={(e) => {
+              if (!isLoggedIn) {
+                e.preventDefault();
+                openModal();
+              }
+            }}
           >
             <FiSearch style={{ marginRight: "8px" }} />
             워크로그

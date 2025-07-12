@@ -24,6 +24,7 @@ function Home() {
   const [mapCenter, setMapCenter] = useState({
     lat: getPosition()?.lat ?? 37.394946,
     lng: getPosition()?.lng ?? 127.110828,
+    level: getPosition()?.level ?? 10,
   });
 
   const [modalState, setModalState] = useState<{
@@ -45,7 +46,7 @@ function Home() {
   });
 
   const handleLocationUpdate = (lat: number, lng: number) => {
-    setMapCenter({ lat, lng });
+    setMapCenter({ lat, lng, level: mapCenter.level });
   };
 
   const handleAvatarClick = (
@@ -74,6 +75,7 @@ function Home() {
     const position = {
       lat: map.getCenter().getLat(),
       lng: map.getCenter().getLng(),
+      level: map.getLevel(),
     };
     setMapCenter(position);
     savePosition(position);
@@ -93,6 +95,7 @@ function Home() {
       }}
     >
       <Map
+        level={getPosition()?.level ?? 10}
         center={mapCenter}
         style={{ width: "100%", height: "100vh" }}
         onCenterChanged={handleCenterChanged}

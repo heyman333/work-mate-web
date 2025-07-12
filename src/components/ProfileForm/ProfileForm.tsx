@@ -7,6 +7,7 @@ import {
   VStack,
   Heading,
   Field,
+  Separator,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,6 +17,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { Api } from "@/api/api";
 import { toaster } from "../ui/toaster";
 import { useNavigate } from "react-router-dom";
+import { DeleteAccountModal } from "../DeleteAccountModal/DeleteAccountModal";
 
 const profileFormSchema = z.object({
   skills: z.string().min(1, "스킬셋을 입력해주세요"),
@@ -224,6 +226,16 @@ export const ProfileForm = () => {
               >
                 취소
               </Button>
+            </VStack>
+
+            <Separator />
+
+            <VStack gap={2}>
+              <DeleteAccountModal>
+                <Button variant="outline" colorScheme="red" size="sm" w="full">
+                  회원탈퇴
+                </Button>
+              </DeleteAccountModal>
             </VStack>
           </VStack>
         </form>

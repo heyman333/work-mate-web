@@ -232,6 +232,13 @@ export interface UpdateUpdateData {
 
 export type UpdateUpdateError = Error;
 
+export interface DeleteDeleteData {
+  /** @example "회원탈퇴가 완료되었습니다." */
+  message?: string;
+}
+
+export type DeleteDeleteError = Error;
+
 export interface WorkplaceCreatePayload {
   /** Name of the work place */
   name: string;
@@ -269,7 +276,7 @@ export interface WorkplaceUpdatePayload {
   latitude?: number;
   /** Longitude of the work place */
   longitude?: number;
-  /** Description of the work place */
+  /** Description to add to the work place (will be appended to existing descriptions) */
   description?: string;
 }
 
@@ -714,6 +721,24 @@ export class Api<
         body: data,
         secure: true,
         type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Auth
+     * @name DeleteDelete
+     * @summary Delete user account (회원탈퇴)
+     * @request DELETE:/auth/delete
+     * @secure
+     */
+    deleteDelete: (params: RequestParams = {}) =>
+      this.request<DeleteDeleteData, DeleteDeleteError>({
+        path: `/auth/delete`,
+        method: "DELETE",
+        secure: true,
         format: "json",
         ...params,
       }),

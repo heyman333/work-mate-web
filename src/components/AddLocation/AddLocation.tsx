@@ -25,8 +25,13 @@ import api from "@/utils/api";
 
 import { toaster } from "../ui/toaster";
 import type { AxiosError } from "axios";
+import { useGetMe } from "@/hooks/useGetMe";
+import { useLoginModal } from "@/contexts/LoginModalContext";
 
 export function AddLocation() {
+  const { openModal } = useLoginModal();
+  const { data: user } = useGetMe();
+  const isLoggedIn = !!user?.data.user;
   const queryClient = useQueryClient();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -122,7 +127,13 @@ export function AddLocation() {
     <>
       <IconButton
         aria-label="장소 추가"
-        onClick={() => setIsOpen(true)}
+        onClick={() => {
+          if (isLoggedIn) {
+            setIsOpen(true);
+          } else {
+            openModal();
+          }
+        }}
         position="fixed"
         bottom="20"
         right="6"
