@@ -136,12 +136,14 @@ function Home() {
       </Map>
       <AddLocation />
       <CurrentLocationButton onLocationUpdate={handleLocationUpdate} />
-      <CreatorModal
-        isOpen={modalState.isOpen}
-        onClose={handleCloseModal}
-        workplaces={modalState.workplaces}
-        initialIndex={modalState.initialIndex}
-      />
+      {modalState.isOpen && (
+        <CreatorModal
+          isOpen={modalState.isOpen}
+          onClose={handleCloseModal}
+          workplaces={modalState.workplaces}
+          initialIndex={modalState.initialIndex}
+        />
+      )}
     </Dialog.Root>
   );
 }

@@ -80,7 +80,6 @@ const Join = () => {
 
   const { mutate: join } = useMutation({
     mutationFn: (data: UserJoinRequest) => {
-      console.log(data);
       return new Api().auth.joinCreate({
         email: data.email,
         name: data.name,

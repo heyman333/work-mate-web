@@ -239,6 +239,32 @@ export interface DeleteDeleteData {
 
 export type DeleteDeleteError = Error;
 
+export interface LikeCreateData {
+  /** @example "사용자를 좋아요했습니다." */
+  message?: string;
+}
+
+export type LikeCreateError = Error;
+
+export interface UnlikeDeleteData {
+  /** @example "좋아요를 취소했습니다." */
+  message?: string;
+}
+
+export type UnlikeDeleteError = Error;
+
+export interface LikedUsersListData {
+  users?: User[];
+}
+
+export type LikedUsersListError = Error;
+
+export interface LikedByUsersListData {
+  users?: User[];
+}
+
+export type LikedByUsersListError = Error;
+
 export interface WorkplaceCreatePayload {
   /** Name of the work place */
   name: string;
@@ -738,6 +764,78 @@ export class Api<
       this.request<DeleteDeleteData, DeleteDeleteError>({
         path: `/auth/delete`,
         method: "DELETE",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Auth
+     * @name LikeCreate
+     * @summary Like a user
+     * @request POST:/auth/like/{targetUserId}
+     * @secure
+     */
+    likeCreate: (targetUserId: string, params: RequestParams = {}) =>
+      this.request<LikeCreateData, LikeCreateError>({
+        path: `/auth/like/${targetUserId}`,
+        method: "POST",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Auth
+     * @name UnlikeDelete
+     * @summary Unlike a user
+     * @request DELETE:/auth/unlike/{targetUserId}
+     * @secure
+     */
+    unlikeDelete: (targetUserId: string, params: RequestParams = {}) =>
+      this.request<UnlikeDeleteData, UnlikeDeleteError>({
+        path: `/auth/unlike/${targetUserId}`,
+        method: "DELETE",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Auth
+     * @name LikedUsersList
+     * @summary Get list of users I liked
+     * @request GET:/auth/liked-users
+     * @secure
+     */
+    likedUsersList: (params: RequestParams = {}) =>
+      this.request<LikedUsersListData, LikedUsersListError>({
+        path: `/auth/liked-users`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Auth
+     * @name LikedByUsersList
+     * @summary Get list of users who liked me
+     * @request GET:/auth/liked-by-users
+     * @secure
+     */
+    likedByUsersList: (params: RequestParams = {}) =>
+      this.request<LikedByUsersListData, LikedByUsersListError>({
+        path: `/auth/liked-by-users`,
+        method: "GET",
         secure: true,
         format: "json",
         ...params,

@@ -1,6 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
 import LeftNav from "../LeftNav/LeftNav";
+import { MobileNotSupported } from "../MobileNotSupported/MobileNotSupported";
 
 function Layout() {
   return (
@@ -9,6 +10,7 @@ function Layout() {
       <Box flex="1">
         <Outlet />
       </Box>
+      <MobileNotSupported />
     </Box>
   );
 }

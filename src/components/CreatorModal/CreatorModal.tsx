@@ -26,6 +26,7 @@ import {
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { format } from "date-fns";
 import { type GetWorkplaceData } from "../../api/api";
+import { LikeButton } from "../LikeButton/LikeButton";
 
 type WorkPlace = NonNullable<GetWorkplaceData["workPlaces"]>[number];
 
@@ -96,6 +97,7 @@ export function CreatorModal({
                           >
                             {currentCreator?.name}
                           </Text>
+                          <LikeButton targetUserId={currentCreator?.id ?? ""} />
                         </VStack>
 
                         <Separator />
