@@ -30,9 +30,11 @@ function LeftNav({ width = "250px" }: LeftNavProps) {
       divideX="1px solid"
     >
       <VStack gap={4} align="stretch">
-        <Text fontSize="xl" fontWeight="bold" mb={4}>
-          WorkMate
-        </Text>
+        <Link to="/">
+          <Text fontSize="xl" fontWeight="bold" mb={4}>
+            WorkMate
+          </Text>
+        </Link>
 
         <Link to="/">
           <Button

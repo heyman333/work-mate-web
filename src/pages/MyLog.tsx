@@ -16,8 +16,8 @@ import { StaticMap } from "react-kakao-maps-sdk";
 function MyLog() {
   const queryClient = useQueryClient();
 
-  const { data } = useQuery({
-    queryKey: ["my-log"],
+  const { data, isLoading } = useQuery({
+    queryKey: ["workplaceList"],
     queryFn: () => {
       return new Api().workplace.workplaceList();
     },
@@ -28,7 +28,7 @@ function MyLog() {
       return new Api().workplace.workplaceDelete(id);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["my-log"] });
+      queryClient.invalidateQueries({ queryKey: ["workplaceList"] });
     },
   });
 
@@ -118,7 +118,7 @@ function MyLog() {
       ) : (
         <Box textAlign="center" py={8}>
           <Text color="gray.500" fontSize="lg">
-            등록된 작업 장소가 없습니다.
+            {isLoading ? "로딩중..." : "등록된 작업 장소가 없습니다."}
           </Text>
         </Box>
       )}
