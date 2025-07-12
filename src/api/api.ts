@@ -265,6 +265,26 @@ export interface LikedByUsersListData {
 
 export type LikedByUsersListError = Error;
 
+export interface UserDetailData {
+  user?: {
+    id?: string;
+    name?: string;
+    profileImage?: string;
+    skillSet?: string;
+    githubUrl?: string;
+    linkedinUrl?: string;
+    company?: string;
+    mbti?: string;
+    collaborationGoal?: string;
+    likedCount?: number;
+    likedByCount?: number;
+    /** @format date-time */
+    createdAt?: string;
+  };
+}
+
+export type UserDetailError = Error;
+
 export interface WorkplaceCreatePayload {
   /** Name of the work place */
   name: string;
@@ -837,6 +857,22 @@ export class Api<
         path: `/auth/liked-by-users`,
         method: "GET",
         secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Auth
+     * @name UserDetail
+     * @summary Get other user's public information
+     * @request GET:/auth/user/{id}
+     */
+    userDetail: (id: string, params: RequestParams = {}) =>
+      this.request<UserDetailData, UserDetailError>({
+        path: `/auth/user/${id}`,
+        method: "GET",
         format: "json",
         ...params,
       }),

@@ -36,6 +36,13 @@ export function LikeButton({
       return new Api().auth.likedUsersList();
     },
   });
+  const { data: userData } = useQuery({
+    queryKey: ["user", targetUserId],
+    queryFn: () => {
+      return new Api().auth.userDetail(targetUserId);
+    },
+  });
+
   const isLiked = likeUserData?.data.users?.some(
     (user) => user.id === targetUserId
   );
@@ -50,6 +57,7 @@ export function LikeButton({
         description: "좋아요를 눌렀습니다.",
       });
       queryClient.invalidateQueries({ queryKey: ["likedUsersList"] });
+      queryClient.invalidateQueries({ queryKey: ["user", targetUserId] });
     },
     onError: (error: HttpResponse<LikeCreateData, LikeCreateError>) => {
       toaster.create({
@@ -71,9 +79,11 @@ export function LikeButton({
         description: "좋아요를 취소했습니다.",
       });
       queryClient.invalidateQueries({ queryKey: ["likedUsersList"] });
+      queryClient.invalidateQueries({ queryKey: ["user", targetUserId] });
     },
     onError: () => {
       queryClient.invalidateQueries({ queryKey: ["likedUsersList"] });
+      queryClient.invalidateQueries({ queryKey: ["user", targetUserId] });
     },
   });
 
@@ -107,7 +117,7 @@ export function LikeButton({
     >
       {isLiked ? <MdFavorite color="red" /> : <MdFavoriteBorder />}
       <Text fontSize="sm" color={isLiked ? "red.400" : "gray.500"}>
-        좋아요
+        {userData?.data.user?.likedByCount}
       </Text>
     </IconButton>
   );
