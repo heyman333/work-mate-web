@@ -6,47 +6,22 @@ import { useState } from "react";
 function Message() {
   const [activeTab, setActiveTab] = useState("received");
 
-  const { data: receivedData } = useQuery({
+  const { data: receivedData, isLoading: receivedLoading } = useQuery({
     queryKey: ["messageReceivedList"],
     queryFn: () => {
       return new Api().message.receivedList();
     },
   });
 
-  const { data: sentData } = useQuery({
+  const { data: sentData, isLoading: sentLoading } = useQuery({
     queryKey: ["messageSentList"],
     queryFn: () => {
       return new Api().message.sentList();
     },
   });
 
-  // Sample data for demonstration - replace with actual API data
-  const receivedMessages: Message[] = receivedData?.data || [
-    {
-      _id: "1",
-      subject: "프로젝트 협업 제안",
-      content: "안녕하세요! 같이 프로젝트를 진행해보면 어떨까요?",
-      fromUserId: "user1",
-      createdAt: "2024-01-15T10:00:00Z",
-    },
-    {
-      _id: "2",
-      subject: "스터디 모집",
-      content: "React 스터디원을 모집합니다. 관심있으시면 연락주세요.",
-      fromUserId: "user2",
-      createdAt: "2024-01-14T10:00:00Z",
-    },
-  ];
-
-  const sentMessages: Message[] = sentData?.data || [
-    {
-      _id: "3",
-      subject: "안녕하세요",
-      content: "같이 근무하게 되어서 반갑습니다!",
-      targetUserId: "user3",
-      createdAt: "2024-01-13T10:00:00Z",
-    },
-  ];
+  const receivedMessages: Message[] = receivedData?.data || [];
+  const sentMessages: Message[] = sentData?.data || [];
 
   const MessageList = ({
     messages,
@@ -56,7 +31,11 @@ function Message() {
     type: "received" | "sent";
   }) => (
     <VStack gap={3} align="stretch">
-      {messages.length === 0 ? (
+      {receivedLoading || sentLoading ? (
+        <Text color="gray.500" textAlign="center" py={8}>
+          로딩중...
+        </Text>
+      ) : messages.length === 0 ? (
         <Text color="gray.500" textAlign="center" py={8}>
           {type === "received"
             ? "받은 메시지가 없습니다"
