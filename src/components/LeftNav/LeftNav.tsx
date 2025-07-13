@@ -1,5 +1,5 @@
 import { Box, VStack, Text, Button, HStack, Avatar } from "@chakra-ui/react";
-import { FiHome, FiSearch, FiLogOut } from "react-icons/fi";
+import { FiHome, FiSearch, FiLogOut, FiMessageCircle } from "react-icons/fi";
 import GoogleLoginButton from "../Auth/GoogleLoginButton";
 import GitHubLoginButton from "../Auth/GitHubLoginButton";
 import { useGetMe } from "../../hooks/useGetMe";
@@ -62,6 +62,24 @@ function LeftNav({ width = "250px" }: LeftNavProps) {
           >
             <FiSearch style={{ marginRight: "8px" }} />
             워크로그
+          </Button>
+        </Link>
+
+        <Link to="/message">
+          <Button
+            w="100%"
+            variant="ghost"
+            justifyContent="flex-start"
+            _hover={{ bg: "gray.100" }}
+            onClick={(e) => {
+              if (!isLoggedIn) {
+                e.preventDefault();
+                openModal();
+              }
+            }}
+          >
+            <FiMessageCircle style={{ marginRight: "8px" }} />
+            메세지 보관함
           </Button>
         </Link>
 

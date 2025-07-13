@@ -13,6 +13,7 @@ import {
   Card,
   Link,
   CloseButton,
+  Button,
 } from "@chakra-ui/react";
 import {
   MdChevronLeft,
@@ -22,11 +23,13 @@ import {
   MdGroup,
   MdLink,
   MdHistory,
+  MdMessage,
 } from "react-icons/md";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { format } from "date-fns";
 import { type GetWorkplaceData } from "../../api/api";
 import { LikeButton } from "../LikeButton/LikeButton";
+import { MessageModal } from "../MessageModal/MessageModal";
 
 type WorkPlace = NonNullable<GetWorkplaceData["workPlaces"]>[number];
 
@@ -42,6 +45,8 @@ export function CreatorModal({
   initialIndex = 0,
 }: CreatorModalProps) {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
+  const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState<string>("");
 
   const currentWorkplace = workplaces[currentIndex];
   const currentCreator = currentWorkplace?.creator;
@@ -52,6 +57,11 @@ export function CreatorModal({
 
   const goToNext = () => {
     setCurrentIndex((prev) => (prev < workplaces.length - 1 ? prev + 1 : 0));
+  };
+
+  const handleOpenMessageModal = (targetUserId: string) => {
+    setSelectedUserId(targetUserId);
+    setIsMessageModalOpen(true);
   };
 
   return (
@@ -97,7 +107,23 @@ export function CreatorModal({
                           >
                             {currentCreator?.name}
                           </Text>
-                          <LikeButton targetUserId={currentCreator?.id ?? ""} />
+                          <VStack gap={4}>
+                            <LikeButton
+                              targetUserId={currentCreator?.id ?? ""}
+                            />
+                            {currentCreator?.id && (
+                              <Button
+                                size="sm"
+                                colorScheme="blue"
+                                onClick={() =>
+                                  handleOpenMessageModal(currentCreator.id!)
+                                }
+                              >
+                                <MdMessage />
+                                메시지 보내기
+                              </Button>
+                            )}
+                          </VStack>
                         </VStack>
 
                         <Separator />
@@ -307,6 +333,16 @@ export function CreatorModal({
           </Dialog.Body>
         </Dialog.Content>
       </Dialog.Positioner>
+
+      <MessageModal
+        isOpen={isMessageModalOpen}
+        onClose={() => setIsMessageModalOpen(false)}
+        targetUserName={
+          workplaces.find((wp) => wp.creator?.id === selectedUserId)?.creator
+            ?.name
+        }
+        targetUserId={selectedUserId}
+      />
     </Portal>
   );
 }

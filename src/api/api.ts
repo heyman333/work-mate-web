@@ -132,6 +132,47 @@ export interface WorkPlaceCreateRequest {
   description?: string;
 }
 
+export interface Message {
+  /** 메시지 ID */
+  _id?: string;
+  /** 발송자 ID */
+  fromUserId?: string;
+  /** 수신자 ID */
+  targetUserId?: string;
+  /** 수신자 이메일 */
+  toUserEmail?: string;
+  /** 제목 */
+  subject?: string;
+  /** 내용 */
+  content?: string;
+  /** 읽음 여부 */
+  isRead?: boolean;
+  /**
+   * 읽은 시간
+   * @format date-time
+   */
+  readAt?: string;
+  /**
+   * 생성 시간
+   * @format date-time
+   */
+  createdAt?: string;
+  /**
+   * 수정 시간
+   * @format date-time
+   */
+  updatedAt?: string;
+}
+
+export interface CreateMessageRequest {
+  /** 수신자 ID */
+  targetUserId: string;
+  /** 제목 */
+  subject: string;
+  /** 내용 */
+  content: string;
+}
+
 export interface WorkPlace {
   /** Work place ID */
   id?: string;
@@ -284,6 +325,36 @@ export interface UserDetailData {
 }
 
 export type UserDetailError = Error;
+
+export type SendCreateData = Message;
+
+export type SendCreateError = {
+  error?: string;
+};
+
+export type ReceivedListData = Message[];
+
+export type ReceivedListError = {
+  error?: string;
+};
+
+export type SentListData = Message[];
+
+export type SentListError = {
+  error?: string;
+};
+
+export type MessageDetailData = Message;
+
+export type MessageDetailError = {
+  error?: string;
+};
+
+export type ReadPartialUpdateData = Message;
+
+export type ReadPartialUpdateError = {
+  error?: string;
+};
 
 export interface WorkplaceCreatePayload {
   /** Name of the work place */
@@ -873,6 +944,99 @@ export class Api<
       this.request<UserDetailData, UserDetailError>({
         path: `/auth/user/${id}`,
         method: "GET",
+        format: "json",
+        ...params,
+      }),
+  };
+  message = {
+    /**
+     * No description
+     *
+     * @tags Messages
+     * @name SendCreate
+     * @summary 메시지 발송
+     * @request POST:/message/send
+     * @secure
+     */
+    sendCreate: (data: CreateMessageRequest, params: RequestParams = {}) =>
+      this.request<SendCreateData, SendCreateError>({
+        path: `/message/send`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Messages
+     * @name ReceivedList
+     * @summary 받은 메시지 목록 조회
+     * @request GET:/message/received
+     * @secure
+     */
+    receivedList: (params: RequestParams = {}) =>
+      this.request<ReceivedListData, ReceivedListError>({
+        path: `/message/received`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Messages
+     * @name SentList
+     * @summary 보낸 메시지 목록 조회
+     * @request GET:/message/sent
+     * @secure
+     */
+    sentList: (params: RequestParams = {}) =>
+      this.request<SentListData, SentListError>({
+        path: `/message/sent`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Messages
+     * @name MessageDetail
+     * @summary 특정 메시지 조회
+     * @request GET:/message/{id}
+     * @secure
+     */
+    messageDetail: (id: string, params: RequestParams = {}) =>
+      this.request<MessageDetailData, MessageDetailError>({
+        path: `/message/${id}`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Messages
+     * @name ReadPartialUpdate
+     * @summary 메시지를 읽음으로 표시
+     * @request PATCH:/message/{id}/read
+     * @secure
+     */
+    readPartialUpdate: (id: string, params: RequestParams = {}) =>
+      this.request<ReadPartialUpdateData, ReadPartialUpdateError>({
+        path: `/message/${id}/read`,
+        method: "PATCH",
+        secure: true,
         format: "json",
         ...params,
       }),

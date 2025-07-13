@@ -2,6 +2,7 @@ import { Suspense, lazy } from "react";
 import { Navigate, type RouteObject } from "react-router-dom";
 import Layout from "../components/Layout/Layout";
 
+const MessagePage = lazy(() => import("../pages/Message"));
 const HomePage = lazy(() => import("../pages/Home"));
 const GoogleAuthCallbackPage = lazy(
   () => import("../pages/GoogleAuthCallback")
@@ -40,6 +41,14 @@ export const root: RouteObject[] = [
         element: (
           <Suspense>
             <MyLogPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/message",
+        element: (
+          <Suspense>
+            <MessagePage />
           </Suspense>
         ),
       },

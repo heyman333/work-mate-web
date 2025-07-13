@@ -66,7 +66,7 @@ function MyLog() {
                       {workplace.description.map((description) => (
                         <HStack key={description.date}>
                           <Text color="gray.600" fontSize="sm">
-                            {format(description.date, "yyyy-MM-dd")}
+                            {format(description.date, "yyyy년 MM월 dd일")} -
                           </Text>
                           <Text color="gray.600" fontSize="sm">
                             {description.content}
